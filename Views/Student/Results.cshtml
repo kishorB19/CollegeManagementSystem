@@ -1,0 +1,33 @@
+@model List<ExamResult>
+@{ ViewData["Title"] = "My Results"; var gpa = (double)(ViewBag.GPA ?? 0); }
+
+<div class="stat-card animate-in" style="margin-bottom: 24px;">
+    <div class="stat-info"><h3>Current GPA</h3><div class="stat-value" data-count="@gpa">0</div><span class="stat-label">Based on latest results</span></div>
+    <div class="stat-icon purple"><i class="fas fa-star"></i></div>
+</div>
+
+<div class="card animate-in">
+    <div class="card-header"><h2><i class="fas fa-poll"></i> All Exam Results</h2></div>
+    <div class="card-body">
+        <div class="table-container">
+            <table class="data-table">
+                <thead><tr><th>Course</th><th>Code</th><th>Exam Type</th><th>Marks</th><th>Percentage</th><th>Grade</th><th>Date</th></tr></thead>
+                <tbody>
+                    @foreach (var r in Model)
+                    {
+                        var pct = r.TotalMarks > 0 ? Math.Round(r.MarksObtained / r.TotalMarks * 100, 1) : 0;
+                        <tr>
+                            <td style="font-weight: 500; color: var(--text-primary);">@r.Course?.CourseName</td>
+                            <td><span class="badge badge-primary">@r.Course?.CourseCode</span></td>
+                            <td>@r.ExamType</td>
+                            <td>@r.MarksObtained / @r.TotalMarks</td>
+                            <td><span class="badge @(pct >= 80 ? "badge-success" : pct >= 50 ? "badge-info" : "badge-danger")">@pct%</span></td>
+                            <td><span class="badge @(r.Grade == "A+" || r.Grade == "A" ? "badge-success" : r.Grade == "F" ? "badge-danger" : "badge-info")">@r.Grade</span></td>
+                            <td>@r.ExamDate.ToString("dd MMM yyyy")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

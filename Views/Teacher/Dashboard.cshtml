@@ -1,0 +1,66 @@
+@model TeacherDashboardViewModel
+@{
+    ViewData["Title"] = "Teacher Dashboard";
+}
+
+<div class="profile-card animate-in">
+    <div class="profile-avatar"><i class="fas fa-chalkboard-teacher"></i></div>
+    <div class="profile-info">
+        <h2>@Model.Teacher?.User?.FullName</h2>
+        <p>@Model.Teacher?.Designation — @Model.Teacher?.Department</p>
+        <div class="profile-details">
+            <span class="profile-detail"><i class="fas fa-id-badge"></i> @Model.Teacher?.EmployeeId</span>
+            <span class="profile-detail"><i class="fas fa-flask"></i> @Model.Teacher?.Specialization</span>
+            <span class="profile-detail"><i class="fas fa-graduation-cap"></i> @Model.Teacher?.Qualification</span>
+        </div>
+    </div>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card animate-in">
+        <div class="stat-info"><h3>My Courses</h3><div class="stat-value" data-count="@Model.MyCourses.Count">0</div><span class="stat-label">Assigned courses</span></div>
+        <div class="stat-icon purple"><i class="fas fa-book"></i></div>
+    </div>
+    <div class="stat-card animate-in">
+        <div class="stat-info"><h3>Total Students</h3><div class="stat-value" data-count="@Model.TotalStudents">0</div><span class="stat-label">In my courses</span></div>
+        <div class="stat-icon green"><i class="fas fa-users"></i></div>
+    </div>
+    <div class="stat-card animate-in">
+        <div class="stat-info"><h3>Today's Classes</h3><div class="stat-value" data-count="@Model.TodayClasses">0</div><span class="stat-label">Scheduled today</span></div>
+        <div class="stat-icon blue"><i class="fas fa-calendar-day"></i></div>
+    </div>
+    <div class="stat-card animate-in">
+        <div class="stat-info"><h3>Pending Leaves</h3><div class="stat-value" data-count="@Model.PendingLeaves">0</div><span class="stat-label">Awaiting approval</span></div>
+        <div class="stat-icon orange"><i class="fas fa-clock"></i></div>
+    </div>
+</div>
+
+<div class="grid-2">
+    <div class="card animate-in">
+        <div class="card-header"><h2><i class="fas fa-chart-bar"></i> Course Attendance</h2></div>
+        <div class="card-body">
+            <div class="chart-container">
+                <canvas id="courseAttendanceChart"
+                    data-labels='@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.CourseAttendance.Keys))'
+                    data-values='@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.CourseAttendance.Values))'>
+                </canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="card animate-in">
+        <div class="card-header"><h2><i class="fas fa-bullhorn"></i> Recent Notices</h2></div>
+        <div class="card-body">
+            @foreach (var notice in Model.RecentNotices)
+            {
+                <div class="notice-item @(notice.Priority == "High" ? "priority-high" : notice.Priority == "Urgent" ? "priority-urgent" : "")">
+                    <div class="notice-title">@notice.Title</div>
+                    <div class="notice-meta">
+                        <span><i class="fas fa-calendar"></i> @notice.PostedDate.ToString("dd MMM yyyy")</span>
+                        <span class="badge @(notice.Priority == "Urgent" ? "badge-danger" : notice.Priority == "High" ? "badge-warning" : "badge-muted")">@notice.Priority</span>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

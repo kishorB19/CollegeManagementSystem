@@ -1,0 +1,42 @@
+@model List<Teacher>
+@{
+    ViewData["Title"] = "Manage Teachers";
+}
+
+<div class="card animate-in">
+    <div class="card-header">
+        <h2><i class="fas fa-chalkboard-teacher"></i> All Teachers (@Model.Count)</h2>
+    </div>
+    <div class="card-body">
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr><th>#</th><th>Name</th><th>Employee ID</th><th>Department</th><th>Designation</th><th>Specialization</th><th>Courses</th><th>Actions</th></tr>
+                </thead>
+                <tbody>
+                    @{ int idx = 1; }
+                    @foreach (var teacher in Model)
+                    {
+                        <tr>
+                            <td>@idx</td>
+                            <td style="color: var(--text-primary); font-weight: 500;">@teacher.User?.FullName</td>
+                            <td><span class="badge badge-info">@teacher.EmployeeId</span></td>
+                            <td>@teacher.Department</td>
+                            <td>@teacher.Designation</td>
+                            <td>@teacher.Specialization</td>
+                            <td><span class="badge badge-primary">@teacher.Courses.Count</span></td>
+                            <td>
+                                <form asp-action="DeleteTeacher" asp-controller="Admin" method="post" style="display:inline;" onsubmit="return confirmDelete('Delete this teacher?')">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@teacher.TeacherId" />
+                                    <button type="submit" class="btn btn-xs btn-danger"><i class="fas fa-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                        idx++;
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

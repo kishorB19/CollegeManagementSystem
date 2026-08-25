@@ -1,0 +1,63 @@
+@model List<Course>
+@{
+    ViewData["Title"] = "Manage Courses";
+    var teachers = ViewBag.Teachers as List<Teacher> ?? new List<Teacher>();
+}
+
+<div class="card animate-in" style="margin-bottom: 24px;">
+    <div class="card-header">
+        <h2><i class="fas fa-plus-circle"></i> Add New Course</h2>
+    </div>
+    <div class="card-body">
+        <form asp-action="CreateCourse" asp-controller="Admin" method="post" data-validate>
+            @Html.AntiForgeryToken()
+            <div class="form-row">
+                <div class="form-group"><label class="form-label">Course Name</label><input type="text" name="CourseName" class="form-control" required placeholder="e.g. Data Structures" /></div>
+                <div class="form-group"><label class="form-label">Course Code</label><input type="text" name="CourseCode" class="form-control" required placeholder="e.g. CS301" /></div>
+                <div class="form-group"><label class="form-label">Department</label>
+                    <select name="Department" class="form-control"><option>Computer Science</option><option>Electronics</option><option>Mathematics</option><option>Physics</option></select>
+                </div>
+                <div class="form-group"><label class="form-label">Semester</label><input type="number" name="Semester" class="form-control" min="1" max="8" value="1" required /></div>
+                <div class="form-group"><label class="form-label">Credits</label><input type="number" name="Credits" class="form-control" min="1" max="6" value="3" required /></div>
+                <div class="form-group"><label class="form-label">Teacher</label>
+                    <select name="TeacherId" class="form-control">
+                        <option value="">-- Select --</option>
+                        @foreach (var t in teachers) { <option value="@t.TeacherId">@t.User?.FullName (@t.Department)</option> }
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> Add Course</button>
+        </form>
+    </div>
+</div>
+
+<div class="card animate-in">
+    <div class="card-header"><h2><i class="fas fa-book"></i> All Courses (@Model.Count)</h2></div>
+    <div class="card-body">
+        <div class="table-container">
+            <table class="data-table">
+                <thead><tr><th>Code</th><th>Course Name</th><th>Department</th><th>Semester</th><th>Credits</th><th>Teacher</th><th>Actions</th></tr></thead>
+                <tbody>
+                    @foreach (var c in Model)
+                    {
+                        <tr>
+                            <td><span class="badge badge-primary">@c.CourseCode</span></td>
+                            <td style="color: var(--text-primary); font-weight: 500;">@c.CourseName</td>
+                            <td>@c.Department</td>
+                            <td>Sem @c.Semester</td>
+                            <td>@c.Credits</td>
+                            <td>@(c.Teacher?.User?.FullName ?? "—")</td>
+                            <td>
+                                <form asp-action="DeleteCourse" asp-controller="Admin" method="post" style="display:inline;" onsubmit="return confirmDelete('Delete this course?')">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@c.CourseId" />
+                                    <button type="submit" class="btn btn-xs btn-danger"><i class="fas fa-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

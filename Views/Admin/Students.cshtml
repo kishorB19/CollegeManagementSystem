@@ -1,0 +1,53 @@
+@model List<Student>
+@{
+    ViewData["Title"] = "Manage Students";
+}
+
+<div class="card animate-in">
+    <div class="card-header">
+        <h2><i class="fas fa-user-graduate"></i> All Students (@Model.Count)</h2>
+    </div>
+    <div class="card-body">
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Roll Number</th>
+                        <th>Department</th>
+                        <th>Semester</th>
+                        <th>Section</th>
+                        <th>Phone</th>
+                        <th>Guardian</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ int idx = 1; }
+                    @foreach (var student in Model)
+                    {
+                        <tr>
+                            <td>@idx</td>
+                            <td style="color: var(--text-primary); font-weight: 500;">@student.User?.FullName</td>
+                            <td><span class="badge badge-primary">@student.RollNumber</span></td>
+                            <td>@student.Department</td>
+                            <td>Sem @student.Semester</td>
+                            <td>@student.Section</td>
+                            <td>@student.Phone</td>
+                            <td>@student.GuardianName</td>
+                            <td>
+                                <form asp-action="DeleteStudent" asp-controller="Admin" method="post" style="display:inline;" onsubmit="return confirmDelete('Delete this student?')">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@student.StudentId" />
+                                    <button type="submit" class="btn btn-xs btn-danger"><i class="fas fa-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                        idx++;
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

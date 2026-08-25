@@ -1,0 +1,151 @@
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>College Management System — Modern Campus Portal</title>
+    <meta name="description" content="A comprehensive college management portal for students, teachers and administrators. Manage attendance, results, fees, and more." />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/style.css" />
+</head>
+<body>
+    <nav class="landing-nav">
+        <div class="landing-logo">
+            <i class="fas fa-graduation-cap"></i>
+            <span>CMS Portal</span>
+        </div>
+        <div class="landing-nav-links">
+            <a href="#features">Features</a>
+            <a href="#credentials">Demo Login</a>
+            <a href="/Account/Login" class="hero-btn primary" style="padding: 8px 20px; font-size: 0.9rem;">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fas fa-sparkles"></i>
+                Built with ASP.NET Core &amp; C#
+            </div>
+            <h1 class="hero-title">
+                Smart <span class="gradient">College Management</span> System
+            </h1>
+            <p class="hero-description">
+                An easy-to-use portal for students, teachers, and admins to track attendance, view exam marks, manage fees, and check college notices.
+            </p>
+            <div class="hero-buttons">
+                <a href="/Account/Login" class="hero-btn primary">
+                    <i class="fas fa-rocket"></i> Get Started
+                </a>
+                <a href="#features" class="hero-btn outline">
+                    <i class="fas fa-info-circle"></i> Learn More
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="section-title">
+            <h2>Powerful Features</h2>
+            <p>Everything you need to manage a modern educational institution</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card animate-on-scroll">
+                <div class="feature-icon">
+                    <i class="fas fa-clipboard-check"></i>
+                </div>
+                <h3>Attendance Tracking</h3>
+                <p>Mark and monitor daily attendance with real-time percentage calculations and automated reports per course.</p>
+            </div>
+            <div class="feature-card animate-on-scroll">
+                <div class="feature-icon" style="background: rgba(16, 185, 129, 0.12); color: #10b981;">
+                    <i class="fas fa-poll"></i>
+                </div>
+                <h3>Exam Results</h3>
+                <p>Enter exam marks, auto-calculate grades and GPA, and provide students instant access to their academic performance.</p>
+            </div>
+            <div class="feature-card animate-on-scroll">
+                <div class="feature-icon" style="background: rgba(245, 158, 11, 0.12); color: #f59e0b;">
+                    <i class="fas fa-money-bill-wave"></i>
+                </div>
+                <h3>Fee Management</h3>
+                <p>Track tuition, lab, library, and exam fees with payment status, overdue alerts, and financial summary reports.</p>
+            </div>
+            <div class="feature-card animate-on-scroll">
+                <div class="feature-icon" style="background: rgba(239, 68, 68, 0.12); color: #ef4444;">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <h3>Role-Based Access</h3>
+                <p>Separate dashboards for Admin, Teacher, and Student with secure authentication and authorization controls.</p>
+            </div>
+            <div class="feature-card animate-on-scroll">
+                <div class="feature-icon" style="background: rgba(59, 130, 246, 0.12); color: #3b82f6;">
+                    <i class="fas fa-bullhorn"></i>
+                </div>
+                <h3>Notices & Communication</h3>
+                <p>Post and target announcements to specific roles with priority levels — keep everyone informed in real-time.</p>
+            </div>
+            <div class="feature-card animate-on-scroll">
+                <div class="feature-icon" style="background: rgba(139, 92, 246, 0.12); color: #a78bfa;">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>Analytics Dashboard</h3>
+                <p>Interactive charts showing attendance trends, department statistics, fee collection, and academic performance at a glance.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="credentials-section" id="credentials">
+        <div class="section-title">
+            <h2>Demo Login Credentials</h2>
+            <p>Click any card to automatically login with the pre-configured account</p>
+        </div>
+        <div class="credentials-grid">
+            <a href="/Account/Login?email=admin@college.com&password=admin123" class="credential-card" style="display: block; cursor: pointer; color: inherit; text-decoration: none;">
+                <div class="role-icon" style="background: rgba(99, 102, 241, 0.15); color: #818cf8;">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <h3>Admin</h3>
+                <div class="cred-info">Email</div>
+                <div class="cred-value">admin@@college.com</div>
+                <div class="cred-info" style="margin-top: 8px;">Password</div>
+                <div class="cred-value">admin123</div>
+            </a>
+            <a href="/Account/Login?email=kishor.kumar@college.com&password=teacher123" class="credential-card" style="display: block; cursor: pointer; color: inherit; text-decoration: none;">
+                <div class="role-icon" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                </div>
+                <h3>Teacher</h3>
+                <div class="cred-info">Email</div>
+                <div class="cred-value">kishor.kumar@@college.com</div>
+                <div class="cred-info" style="margin-top: 8px;">Password</div>
+                <div class="cred-value">teacher123</div>
+            </a>
+            <a href="/Account/Login?email=rahul.kumar@student.college.com&password=student123" class="credential-card" style="display: block; cursor: pointer; color: inherit; text-decoration: none;">
+                <div class="role-icon" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b;">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                <h3>Student</h3>
+                <div class="cred-info">Email</div>
+                <div class="cred-value">rahul.kumar@@student.college.com</div>
+                <div class="cred-info" style="margin-top: 8px;">Password</div>
+                <div class="cred-value">student123</div>
+            </a>
+        </div>
+    </section>
+
+    <footer class="landing-footer">
+        <p>&copy; @DateTime.Now.Year College Management System. Built with ❤️ using ASP.NET Core, C#, and SQL. 
+        <a href="https://github.com/kishorB19" target="_blank"><i class="fab fa-github"></i> GitHub: kishorB19</a></p>
+    </footer>
+
+    <script src="~/js/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CMS Portal</title>
+    <meta name="description" content="College Management System - A comprehensive portal for students, teachers, and administrators" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/style.css" />
+</head>
+<body>
+    
+    @if (TempData["Success"] != null)
+    {
+        <div class="toast toast-success" id="toast">
+            <i class="fas fa-check-circle"></i>
+            <span>@TempData["Success"]</span>
+            <button class="toast-close" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="toast toast-error" id="toast">
+            <i class="fas fa-exclamation-circle"></i>
+            <span>@TempData["Error"]</span>
+            <button class="toast-close" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
+        </div>
+    }
+
+    @if (User.Identity?.IsAuthenticated == true && (User.IsInRole("Admin") || User.IsInRole("Teacher") || User.IsInRole("Student")))
+    {
+        
+        <div class="dashboard-layout">
+            
+            <aside class="sidebar" id="sidebar">
+                <div class="sidebar-header">
+                    <div class="sidebar-logo">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>CMS Portal</span>
+                    </div>
+                    <button class="sidebar-toggle" id="sidebarToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+
+                <nav class="sidebar-nav">
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a href="/Admin/Dashboard" class="nav-item @(ViewContext.RouteData.Values["action"]?.ToString() == "Dashboard" ? "active" : "")">
+                            <i class="fas fa-th-large"></i><span>Dashboard</span>
+                        </a>
+                        <a href="/Admin/Students" class="nav-item @(ViewContext.RouteData.Values["action"]?.ToString() == "Students" ? "active" : "")">
+                            <i class="fas fa-user-graduate"></i><span>Students</span>
+                        </a>
+                        <a href="/Admin/Teachers" class="nav-item @(ViewContext.RouteData.Values["action"]?.ToString() == "Teachers" ? "active" : "")">
+                            <i class="fas fa-chalkboard-teacher"></i><span>Teachers</span>
+                        </a>
+                        <a href="/Admin/Courses" class="nav-item @(ViewContext.RouteData.Values["action"]?.ToString() == "Courses" ? "active" : "")">
+                            <i class="fas fa-book"></i><span>Courses</span>
+                        </a>
+                        <a href="/Admin/Fees" class="nav-item @(ViewContext.RouteData.Values["action"]?.ToString() == "Fees" ? "active" : "")">
+                            <i class="fas fa-money-bill-wave"></i><span>Fees</span>
+                        </a>
+                        <a href="/Admin/Notices" class="nav-item @(ViewContext.RouteData.Values["action"]?.ToString() == "Notices" ? "active" : "")">
+                            <i class="fas fa-bullhorn"></i><span>Notices</span>
+                        </a>
+                        <a href="/Admin/Leaves" class="nav-item @(ViewContext.RouteData.Values["action"]?.ToString() == "Leaves" ? "active" : "")">
+                            <i class="fas fa-calendar-check"></i><span>Leave Requests</span>
+                        </a>
+                    }
+                    else if (User.IsInRole("Teacher"))
+                    {
+                        <a href="/Teacher/Dashboard" class="nav-item @(ViewContext.RouteData.Values["action"]?.ToString() == "Dashboard" ? "active" : "")">
+                            <i class="fas fa-th-large"></i><span>Dashboard</span>
+                        </a>
+                        <a href="/Teacher/MyCourses" class="nav-item @(ViewContext.RouteData.Values["action"]?.ToString() == "MyCourses" ? "active" : "")">
+                            <i class="fas fa-book"></i><span>My Courses</span>
+                        </a>
+                        <a href="/Teacher/Notices" class="nav-item @(ViewContext.RouteData.Values["action"]?.ToString() == "Notices" ? "active" : "")">
+                            <i class="fas fa-bullhorn"></i><span>Notices</span>
+                        </a>
+                    }
+                    else if (User.IsInRole("Student"))
+                    {
+                        <a href="/Student/Dashboard" class="nav-item @(ViewContext.RouteData.Values["action"]?.ToString() == "Dashboard" ? "active" : "")">
+                            <i class="fas fa-th-large"></i><span>Dashboard</span>
+                        </a>
+                        <a href="/Student/Attendance" class="nav-item @(ViewContext.RouteData.Values["action"]?.ToString() == "Attendance" ? "active" : "")">
+                            <i class="fas fa-clipboard-check"></i><span>Attendance</span>
+                        </a>
+                        <a href="/Student/Results" class="nav-item @(ViewContext.RouteData.Values["action"]?.ToString() == "Results" ? "active" : "")">
+                            <i class="fas fa-poll"></i><span>Results</span>
+                        </a>
+                        <a href="/Student/Fees" class="nav-item @(ViewContext.RouteData.Values["action"]?.ToString() == "Fees" ? "active" : "")">
+                            <i class="fas fa-money-bill-wave"></i><span>Fees</span>
+                        </a>
+                        <a href="/Student/Leave" class="nav-item @(ViewContext.RouteData.Values["action"]?.ToString() == "Leave" ? "active" : "")">
+                            <i class="fas fa-calendar-check"></i><span>Leave</span>
+                        </a>
+                        <a href="/Student/Notices" class="nav-item @(ViewContext.RouteData.Values["action"]?.ToString() == "Notices" ? "active" : "")">
+                            <i class="fas fa-bullhorn"></i><span>Notices</span>
+                        </a>
+                        <a href="/Student/Timetable" class="nav-item @(ViewContext.RouteData.Values["action"]?.ToString() == "Timetable" ? "active" : "")">
+                            <i class="fas fa-calendar-alt"></i><span>Timetable</span>
+                        </a>
+                    }
+                </nav>
+
+                <div class="sidebar-footer">
+                    <form asp-controller="Account" asp-action="Logout" method="post">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="nav-item logout-btn">
+                            <i class="fas fa-sign-out-alt"></i><span>Logout</span>
+                        </button>
+                    </form>
+                </div>
+            </aside>
+
+            
+            <main class="main-content">
+                <header class="topbar">
+                    <button class="mobile-toggle" id="mobileToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="topbar-title">
+                        <h1>@ViewData["Title"]</h1>
+                    </div>
+                    <div class="topbar-actions">
+                        <button class="theme-toggle" id="themeToggle" title="Toggle Theme">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                        <div class="user-info">
+                            <div class="user-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <span class="user-name">@User.Identity?.Name</span>
+                        </div>
+                    </div>
+                </header>
+
+                <div class="content-area">
+                    @RenderBody()
+                </div>
+            </main>
+        </div>
+    }
+    else
+    {
+        
+        @RenderBody()
+    }
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="~/js/site.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

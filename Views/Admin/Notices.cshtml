@@ -1,0 +1,49 @@
+@model List<Notice>
+@{
+    ViewData["Title"] = "Manage Notices";
+}
+
+<div class="card animate-in" style="margin-bottom: 24px;">
+    <div class="card-header"><h2><i class="fas fa-plus-circle"></i> Post New Notice</h2></div>
+    <div class="card-body">
+        <form asp-action="CreateNotice" asp-controller="Admin" method="post" data-validate>
+            @Html.AntiForgeryToken()
+            <div class="form-row">
+                <div class="form-group" style="grid-column: 1 / -1;"><label class="form-label">Title</label><input type="text" name="Title" class="form-control" required placeholder="Notice title..." /></div>
+                <div class="form-group"><label class="form-label">Target</label>
+                    <select name="TargetRole" class="form-control"><option value="All">All</option><option value="Students">Students Only</option><option value="Teachers">Teachers Only</option></select>
+                </div>
+                <div class="form-group"><label class="form-label">Priority</label>
+                    <select name="Priority" class="form-control"><option value="Normal">Normal</option><option value="High">High</option><option value="Urgent">Urgent</option><option value="Low">Low</option></select>
+                </div>
+            </div>
+            <div class="form-group"><label class="form-label">Content</label><textarea name="Content" class="form-control" required placeholder="Write notice content..."></textarea></div>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Post Notice</button>
+        </form>
+    </div>
+</div>
+
+<div class="card animate-in">
+    <div class="card-header"><h2><i class="fas fa-bullhorn"></i> All Notices (@Model.Count)</h2></div>
+    <div class="card-body">
+        @foreach (var notice in Model)
+        {
+            <div class="notice-item @(notice.Priority == "High" ? "priority-high" : notice.Priority == "Urgent" ? "priority-urgent" : "")" style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div>
+                    <div class="notice-title">@notice.Title</div>
+                    <div class="notice-content">@notice.Content</div>
+                    <div class="notice-meta">
+                        <span><i class="fas fa-calendar"></i> @notice.PostedDate.ToString("dd MMM yyyy")</span>
+                        <span class="badge @(notice.TargetRole == "All" ? "badge-primary" : notice.TargetRole == "Students" ? "badge-warning" : "badge-info")">@notice.TargetRole</span>
+                        <span class="badge @(notice.Priority == "Urgent" ? "badge-danger" : notice.Priority == "High" ? "badge-warning" : "badge-muted")">@notice.Priority</span>
+                    </div>
+                </div>
+                <form asp-action="DeleteNotice" asp-controller="Admin" method="post" onsubmit="return confirmDelete('Delete this notice?')">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@notice.NoticeId" />
+                    <button type="submit" class="btn btn-xs btn-danger"><i class="fas fa-trash"></i></button>
+                </form>
+            </div>
+        }
+    </div>
+</div>

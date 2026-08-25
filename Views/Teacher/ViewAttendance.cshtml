@@ -1,0 +1,28 @@
+@model List<Attendance>
+@{
+    ViewData["Title"] = "View Attendance";
+}
+<div class="card animate-in">
+    <div class="card-header">
+        <h2><i class="fas fa-clipboard-list"></i> @ViewBag.CourseName — Attendance Records</h2>
+        <a href="/Teacher/MyCourses" class="btn btn-sm btn-outline"><i class="fas fa-arrow-left"></i> Back</a>
+    </div>
+    <div class="card-body">
+        <div class="table-container">
+            <table class="data-table">
+                <thead><tr><th>Date</th><th>Student</th><th>Roll No</th><th>Status</th></tr></thead>
+                <tbody>
+                    @foreach (var a in Model)
+                    {
+                        <tr>
+                            <td>@a.Date.ToString("dd MMM yyyy")</td>
+                            <td style="font-weight: 500; color: var(--text-primary);">@a.Student?.User?.FullName</td>
+                            <td><span class="badge badge-primary">@a.Student?.RollNumber</span></td>
+                            <td><span class="badge @(a.Status == "Present" ? "badge-success" : a.Status == "Absent" ? "badge-danger" : "badge-warning")">@a.Status</span></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

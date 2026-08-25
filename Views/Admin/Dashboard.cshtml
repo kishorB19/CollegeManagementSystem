@@ -1,0 +1,155 @@
+@model AdminDashboardViewModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+
+<div class="stats-grid">
+    <div class="stat-card animate-in">
+        <div class="stat-info">
+            <h3>Total Students</h3>
+            <div class="stat-value" data-count="@Model.TotalStudents">0</div>
+            <span class="stat-label">Enrolled students</span>
+        </div>
+        <div class="stat-icon purple"><i class="fas fa-user-graduate"></i></div>
+    </div>
+    <div class="stat-card animate-in">
+        <div class="stat-info">
+            <h3>Total Teachers</h3>
+            <div class="stat-value" data-count="@Model.TotalTeachers">0</div>
+            <span class="stat-label">Faculty members</span>
+        </div>
+        <div class="stat-icon green"><i class="fas fa-chalkboard-teacher"></i></div>
+    </div>
+    <div class="stat-card animate-in">
+        <div class="stat-info">
+            <h3>Total Courses</h3>
+            <div class="stat-value" data-count="@Model.TotalCourses">0</div>
+            <span class="stat-label">Active courses</span>
+        </div>
+        <div class="stat-icon blue"><i class="fas fa-book"></i></div>
+    </div>
+    <div class="stat-card animate-in">
+        <div class="stat-info">
+            <h3>Attendance</h3>
+            <div class="stat-value" data-count="@Model.OverallAttendancePercentage" data-suffix="%">0</div>
+            <span class="stat-label">Overall average</span>
+        </div>
+        <div class="stat-icon orange"><i class="fas fa-clipboard-check"></i></div>
+    </div>
+</div>
+
+
+<div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+    <div class="stat-card animate-in">
+        <div class="stat-info">
+            <h3>Fee Collected</h3>
+            <div class="stat-value" data-count="@((double)Model.TotalFeeCollected)" data-prefix="₹">0</div>
+            <span class="stat-label">Total received</span>
+        </div>
+        <div class="stat-icon green"><i class="fas fa-check-circle"></i></div>
+    </div>
+    <div class="stat-card animate-in">
+        <div class="stat-info">
+            <h3>Fee Pending</h3>
+            <div class="stat-value" data-count="@((double)Model.TotalFeePending)" data-prefix="₹">0</div>
+            <span class="stat-label">Outstanding dues</span>
+        </div>
+        <div class="stat-icon red"><i class="fas fa-exclamation-triangle"></i></div>
+    </div>
+</div>
+
+
+<div class="grid-2">
+    <div class="card animate-in">
+        <div class="card-header">
+            <h2><i class="fas fa-chart-pie"></i> Department-wise Students</h2>
+        </div>
+        <div class="card-body">
+            <div class="chart-container">
+                <canvas id="departmentChart"
+                    data-labels='@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.DepartmentWiseStudents.Keys))'
+                    data-values='@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.DepartmentWiseStudents.Values))'>
+                </canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="card animate-in">
+        <div class="card-header">
+            <h2><i class="fas fa-chart-line"></i> Monthly Attendance Trend</h2>
+        </div>
+        <div class="card-body">
+            <div class="chart-container">
+                <canvas id="attendanceChart"
+                    data-labels='@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.MonthlyAttendance.Keys))'
+                    data-values='@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.MonthlyAttendance.Values))'>
+                </canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="grid-2">
+    <div class="card animate-in">
+        <div class="card-header">
+            <h2><i class="fas fa-bullhorn"></i> Recent Notices</h2>
+            <a href="/Admin/Notices" class="btn btn-sm btn-outline">View All</a>
+        </div>
+        <div class="card-body">
+            @if (Model.RecentNotices.Any())
+            {
+                @foreach (var notice in Model.RecentNotices)
+                {
+                    <div class="notice-item @(notice.Priority == "High" ? "priority-high" : notice.Priority == "Urgent" ? "priority-urgent" : "")">
+                        <div class="notice-title">@notice.Title</div>
+                        <div class="notice-meta">
+                            <span><i class="fas fa-calendar"></i> @notice.PostedDate.ToString("dd MMM yyyy")</span>
+                            <span class="badge @(notice.TargetRole == "All" ? "badge-primary" : "badge-info")">@notice.TargetRole</span>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="empty-state">
+                    <i class="fas fa-bullhorn"></i>
+                    <h3>No notices yet</h3>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="card animate-in">
+        <div class="card-header">
+            <h2><i class="fas fa-user-graduate"></i> Recent Students</h2>
+            <a href="/Admin/Students" class="btn btn-sm btn-outline">View All</a>
+        </div>
+        <div class="card-body">
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Roll No</th>
+                            <th>Department</th>
+                            <th>Semester</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var student in Model.RecentStudents)
+                        {
+                            <tr>
+                                <td style="color: var(--text-primary); font-weight: 500;">@student.User?.FullName</td>
+                                <td><span class="badge badge-primary">@student.RollNumber</span></td>
+                                <td>@student.Department</td>
+                                <td>Sem @student.Semester</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,100 @@
+@model MarkAttendanceViewModel
+@{
+    ViewData["Title"] = "Mark Attendance";
+}
+
+<div class="card animate-in">
+    <div class="card-header">
+        <h2><i class="fas fa-clipboard-check"></i> @Model.CourseName</h2>
+    </div>
+    <div class="card-body">
+        <form asp-action="MarkAttendance" asp-controller="Teacher" method="post" id="attendanceForm">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="CourseId" value="@Model.CourseId" />
+
+            <div class="form-group" style="max-width: 300px; margin-bottom: 24px;">
+                <label class="form-label">Date</label>
+                <input type="date" name="Date" id="dateInput" class="form-control" value="@Model.Date.ToString("yyyy-MM-dd")" max="@DateTime.Today.ToString("yyyy-MM-dd")" required />
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead><tr><th>#</th><th>Roll Number</th><th>Student Name</th><th>Status</th></tr></thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.Students.Count; i++)
+                        {
+                            <tr>
+                                <td>@(i + 1)</td>
+                                <td><span class="badge badge-primary">@Model.Students[i].RollNumber</span></td>
+                                <td style="color: var(--text-primary); font-weight: 500;">@Model.Students[i].StudentName</td>
+                                <td>
+                                    <input type="hidden" name="Students[@i].StudentId" value="@Model.Students[i].StudentId" />
+                                    <input type="hidden" name="Students[@i].StudentName" value="@Model.Students[i].StudentName" />
+                                    <input type="hidden" name="Students[@i].RollNumber" value="@Model.Students[i].RollNumber" />
+                                    <div class="attendance-status">
+                                        <input type="radio" name="Students[@i].Status" value="Present" id="present_@i" class="status-radio" @(Model.Students[i].Status == "Present" ? "checked" : "") />
+                                        <label for="present_@i" class="status-label present">Present</label>
+                                        <input type="radio" name="Students[@i].Status" value="Absent" id="absent_@i" class="status-radio" @(Model.Students[i].Status == "Absent" ? "checked" : "") />
+                                        <label for="absent_@i" class="status-label absent">Absent</label>
+                                        <input type="radio" name="Students[@i].Status" value="Late" id="late_@i" class="status-radio" @(Model.Students[i].Status == "Late" ? "checked" : "") />
+                                        <label for="late_@i" class="status-label late">Late</label>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="margin-top: 24px; display: flex; gap: 12px;">
+                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Attendance</button>
+                <a href="/Teacher/MyCourses" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Back</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("dateInput").addEventListener("change", function () {
+            window.location.href = "/Teacher/MarkAttendance?courseId=" + @Model.CourseId + "&date=" + this.value;
+        });
+
+        document.getElementById("attendanceForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            var form = this;
+            var formData = new FormData(form);
+
+            fetch(form.action, {
+                method: form.method,
+                body: formData,
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                }
+            })
+            .then(function (response) { return response.json(); })
+            .then(function (data) {
+                if (data.success) {
+                    showToast(data.message, "success");
+                } else {
+                    showToast(data.message, "error");
+                }
+            })
+            .catch(function () {
+                showToast("An error occurred while saving.", "error");
+            });
+        });
+
+        function showToast(message, type) {
+            document.querySelectorAll(".toast").forEach(function (t) { t.remove(); });
+            var toast = document.createElement("div");
+            toast.className = "toast toast-" + type;
+            toast.innerHTML = '<i class="fas ' + (type === "success" ? "fa-check-circle" : "fa-exclamation-circle") + '"></i><span>' + message + '</span><button class="toast-close" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>';
+            document.body.appendChild(toast);
+            setTimeout(function () {
+                toast.style.animation = "fadeOut 0.4s forwards";
+                setTimeout(function () { toast.remove(); }, 400);
+            }, 4500);
+        }
+    });
+</script>

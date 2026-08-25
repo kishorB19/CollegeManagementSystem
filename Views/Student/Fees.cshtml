@@ -1,0 +1,42 @@
+@model List<FeeRecord>
+@{ ViewData["Title"] = "My Fees"; }
+
+<div class="stats-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 24px;">
+    <div class="stat-card animate-in">
+        <div class="stat-info"><h3>Total Fees</h3><div class="stat-value" data-count="@((double)Model.Sum(f => f.Amount))" data-prefix="₹">0</div></div>
+        <div class="stat-icon blue"><i class="fas fa-money-bill-wave"></i></div>
+    </div>
+    <div class="stat-card animate-in">
+        <div class="stat-info"><h3>Paid</h3><div class="stat-value" data-count="@((double)Model.Where(f => f.Status == "Paid").Sum(f => f.Amount))" data-prefix="₹">0</div></div>
+        <div class="stat-icon green"><i class="fas fa-check-circle"></i></div>
+    </div>
+    <div class="stat-card animate-in">
+        <div class="stat-info"><h3>Pending</h3><div class="stat-value" data-count="@((double)Model.Where(f => f.Status != "Paid").Sum(f => f.Amount))" data-prefix="₹">0</div></div>
+        <div class="stat-icon red"><i class="fas fa-clock"></i></div>
+    </div>
+</div>
+
+<div class="card animate-in">
+    <div class="card-header"><h2><i class="fas fa-receipt"></i> Fee Records</h2></div>
+    <div class="card-body">
+        <div class="table-container">
+            <table class="data-table">
+                <thead><tr><th>Fee Type</th><th>Amount</th><th>Semester</th><th>Due Date</th><th>Paid Date</th><th>Status</th><th>Transaction ID</th></tr></thead>
+                <tbody>
+                    @foreach (var f in Model)
+                    {
+                        <tr>
+                            <td style="font-weight: 500; color: var(--text-primary);">@f.FeeType</td>
+                            <td style="font-weight: 600;">₹@f.Amount.ToString("N0")</td>
+                            <td>Sem @f.Semester</td>
+                            <td>@f.DueDate.ToString("dd MMM yyyy")</td>
+                            <td>@(f.PaidDate?.ToString("dd MMM yyyy") ?? "—")</td>
+                            <td><span class="badge @(f.Status == "Paid" ? "badge-success" : f.Status == "Overdue" ? "badge-danger" : "badge-warning")">@f.Status</span></td>
+                            <td style="font-family: monospace; font-size: 0.8rem;">@(f.TransactionId ?? "—")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
