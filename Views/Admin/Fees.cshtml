@@ -1,0 +1,62 @@
+@model List<FeeRecord>
+@{
+    ViewData["Title"] = "Fee Management";
+    var totalCollected = (decimal)(ViewBag.TotalCollected ?? 0m);
+    var totalPending = (decimal)(ViewBag.TotalPending ?? 0m);
+}
+
+<div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); margin-bottom: 24px;">
+    <div class="stat-card animate-in">
+        <div class="stat-info">
+            <h3>Total Collected</h3>
+            <div class="stat-value" data-count="@((double)totalCollected)" data-prefix="₹">0</div>
+        </div>
+        <div class="stat-icon green"><i class="fas fa-check-circle"></i></div>
+    </div>
+    <div class="stat-card animate-in">
+        <div class="stat-info">
+            <h3>Total Pending</h3>
+            <div class="stat-value" data-count="@((double)totalPending)" data-prefix="₹">0</div>
+        </div>
+        <div class="stat-icon red"><i class="fas fa-clock"></i></div>
+    </div>
+    <div class="stat-card animate-in">
+        <div class="stat-info">
+            <h3>Fee Chart</h3>
+            <div class="chart-container" style="height: 120px;">
+                <canvas id="feeChart" data-collected="@totalCollected" data-pending="@totalPending"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card animate-in">
+    <div class="card-header"><h2><i class="fas fa-exclamation-triangle"></i> Overdue/Pending Fees (@Model.Count)</h2></div>
+    <div class="card-body">
+        <div class="table-container">
+            <table class="data-table">
+                <thead><tr><th>Student</th><th>Roll No</th><th>Fee Type</th><th>Amount</th><th>Due Date</th><th>Status</th><th>Actions</th></tr></thead>
+                <tbody>
+                    @foreach (var f in Model)
+                    {
+                        <tr>
+                            <td style="color: var(--text-primary); font-weight: 500;">@f.Student?.User?.FullName</td>
+                            <td><span class="badge badge-primary">@f.Student?.RollNumber</span></td>
+                            <td>@f.FeeType</td>
+                            <td style="font-weight: 600;">₹@f.Amount.ToString("N0")</td>
+                            <td>@f.DueDate.ToString("dd MMM yyyy")</td>
+                            <td><span class="badge @(f.Status == "Overdue" ? "badge-danger" : "badge-warning")">@f.Status</span></td>
+                            <td>
+                                <form asp-action="MarkFeePaid" asp-controller="Admin" method="post" style="display:inline;">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="feeId" value="@f.FeeId" />
+                                    <button type="submit" class="btn btn-xs btn-success"><i class="fas fa-check"></i> Paid</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

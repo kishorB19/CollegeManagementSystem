@@ -1,0 +1,68 @@
+@model List<LeaveRequest>
+@{
+    ViewData["Title"] = "Leave Requests";
+}
+
+<div class="stats-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 24px;">
+    <div class="stat-card animate-in">
+        <div class="stat-info"><h3>Pending</h3><div class="stat-value" data-count="@Model.Count(l => l.Status == "Pending")">0</div></div>
+        <div class="stat-icon orange"><i class="fas fa-clock"></i></div>
+    </div>
+    <div class="stat-card animate-in">
+        <div class="stat-info"><h3>Approved</h3><div class="stat-value" data-count="@Model.Count(l => l.Status == "Approved")">0</div></div>
+        <div class="stat-icon green"><i class="fas fa-check"></i></div>
+    </div>
+    <div class="stat-card animate-in">
+        <div class="stat-info"><h3>Rejected</h3><div class="stat-value" data-count="@Model.Count(l => l.Status == "Rejected")">0</div></div>
+        <div class="stat-icon red"><i class="fas fa-times"></i></div>
+    </div>
+</div>
+
+<div class="card animate-in">
+    <div class="card-header"><h2><i class="fas fa-calendar-check"></i> All Leave Requests</h2></div>
+    <div class="card-body">
+        <div class="table-container">
+            <table class="data-table">
+                <thead><tr><th>Student</th><th>Type</th><th>From</th><th>To</th><th>Reason</th><th>Status</th><th>Actions</th></tr></thead>
+                <tbody>
+                    @foreach (var leave in Model)
+                    {
+                        <tr>
+                            <td style="font-weight: 500; color: var(--text-primary);">@leave.Student?.User?.FullName</td>
+                            <td><span class="badge badge-info">@leave.LeaveType</span></td>
+                            <td>@leave.StartDate.ToString("dd MMM")</td>
+                            <td>@leave.EndDate.ToString("dd MMM")</td>
+                            <td style="max-width: 250px;">@leave.Reason</td>
+                            <td>
+                                <span class="badge @(leave.Status == "Approved" ? "badge-success" : leave.Status == "Rejected" ? "badge-danger" : "badge-warning")">
+                                    @leave.Status
+                                </span>
+                            </td>
+                            <td>
+                                @if (leave.Status == "Pending")
+                                {
+                                    <div class="action-btns">
+                                        <form asp-action="ApproveLeave" asp-controller="Admin" method="post" style="display:inline;">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@leave.LeaveId" />
+                                            <button type="submit" class="btn btn-xs btn-success"><i class="fas fa-check"></i></button>
+                                        </form>
+                                        <form asp-action="RejectLeave" asp-controller="Admin" method="post" style="display:inline;">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@leave.LeaveId" />
+                                            <button type="submit" class="btn btn-xs btn-danger"><i class="fas fa-times"></i></button>
+                                        </form>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <span style="font-size: 0.8rem; color: var(--text-muted);">@leave.ApprovedBy</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

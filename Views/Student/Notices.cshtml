@@ -1,0 +1,25 @@
+@model List<Notice>
+@{ ViewData["Title"] = "Notices"; }
+<div class="card animate-in">
+    <div class="card-header"><h2><i class="fas fa-bullhorn"></i> Notices for Students</h2></div>
+    <div class="card-body">
+        @if (Model.Any())
+        {
+            @foreach (var notice in Model)
+            {
+                <div class="notice-item @(notice.Priority == "High" ? "priority-high" : notice.Priority == "Urgent" ? "priority-urgent" : "")">
+                    <div class="notice-title">@notice.Title</div>
+                    <div class="notice-content">@notice.Content</div>
+                    <div class="notice-meta">
+                        <span><i class="fas fa-calendar"></i> @notice.PostedDate.ToString("dd MMM yyyy")</span>
+                        <span class="badge @(notice.Priority == "Urgent" ? "badge-danger" : notice.Priority == "High" ? "badge-warning" : "badge-muted")">@notice.Priority</span>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="empty-state"><i class="fas fa-bullhorn"></i><h3>No notices available</h3></div>
+        }
+    </div>
+</div>

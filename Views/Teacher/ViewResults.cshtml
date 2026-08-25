@@ -1,0 +1,28 @@
+@model List<ExamResult>
+@{ ViewData["Title"] = "View Results"; }
+<div class="card animate-in">
+    <div class="card-header">
+        <h2><i class="fas fa-poll"></i> @ViewBag.CourseName — Results</h2>
+        <a href="/Teacher/MyCourses" class="btn btn-sm btn-outline"><i class="fas fa-arrow-left"></i> Back</a>
+    </div>
+    <div class="card-body">
+        <div class="table-container">
+            <table class="data-table">
+                <thead><tr><th>Student</th><th>Roll No</th><th>Exam</th><th>Marks</th><th>Grade</th><th>Date</th></tr></thead>
+                <tbody>
+                    @foreach (var r in Model)
+                    {
+                        <tr>
+                            <td style="font-weight: 500; color: var(--text-primary);">@r.Student?.User?.FullName</td>
+                            <td><span class="badge badge-primary">@r.Student?.RollNumber</span></td>
+                            <td>@r.ExamType</td>
+                            <td>@r.MarksObtained / @r.TotalMarks</td>
+                            <td><span class="badge @(r.Grade == "A+" || r.Grade == "A" ? "badge-success" : r.Grade == "F" ? "badge-danger" : "badge-info")">@r.Grade</span></td>
+                            <td>@r.ExamDate.ToString("dd MMM yyyy")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

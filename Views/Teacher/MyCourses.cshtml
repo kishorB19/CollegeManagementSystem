@@ -1,0 +1,31 @@
+@model List<Course>
+@{
+    ViewData["Title"] = "My Courses";
+}
+
+<div class="features-grid" style="max-width: 100%;">
+    @foreach (var course in Model)
+    {
+        <div class="feature-card animate-in">
+            <div class="feature-icon"><i class="fas fa-book-open"></i></div>
+            <h3>@course.CourseName</h3>
+            <p style="margin-bottom: 12px;">
+                <span class="badge badge-primary">@course.CourseCode</span>
+                <span class="badge badge-info">Sem @course.Semester</span>
+                <span class="badge badge-muted">@course.Credits Credits</span>
+            </p>
+            <p>@course.Department</p>
+            <div style="margin-top: 16px; display: flex; gap: 8px; flex-wrap: wrap;">
+                <a href="/Teacher/MarkAttendance?courseId=@course.CourseId" class="btn btn-sm btn-primary">
+                    <i class="fas fa-clipboard-check"></i> Mark Attendance
+                </a>
+                <a href="/Teacher/AddResults?courseId=@course.CourseId" class="btn btn-sm btn-success">
+                    <i class="fas fa-poll"></i> Add Results
+                </a>
+                <a href="/Teacher/ViewAttendance?courseId=@course.CourseId" class="btn btn-sm btn-outline">
+                    <i class="fas fa-eye"></i> View
+                </a>
+            </div>
+        </div>
+    }
+</div>

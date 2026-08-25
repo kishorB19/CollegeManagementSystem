@@ -1,0 +1,158 @@
+@model StudentDashboardViewModel
+@{
+    ViewData["Title"] = "Student Dashboard";
+}
+
+<div class="profile-card animate-in">
+    <div class="profile-avatar"><i class="fas fa-user-graduate"></i></div>
+    <div class="profile-info">
+        <h2>@Model.Student?.User?.FullName</h2>
+        <p>@Model.Student?.Department — Semester @Model.Student?.Semester, Section @Model.Student?.Section</p>
+        <div class="profile-details">
+            <span class="profile-detail"><i class="fas fa-id-card"></i> @Model.Student?.RollNumber</span>
+            <span class="profile-detail"><i class="fas fa-phone"></i> @Model.Student?.Phone</span>
+            <span class="profile-detail"><i class="fas fa-user-friends"></i> @Model.Student?.GuardianName</span>
+        </div>
+    </div>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card animate-in">
+        <div class="stat-info">
+            <h3>Attendance</h3>
+            <div class="stat-value" data-count="@Model.OverallAttendance" data-suffix="%">0</div>
+            <span class="stat-label">Overall percentage</span>
+        </div>
+        <div class="stat-icon @(Model.OverallAttendance >= 75 ? "green" : Model.OverallAttendance >= 50 ? "orange" : "red")">
+            <i class="fas fa-clipboard-check"></i>
+        </div>
+    </div>
+    <div class="stat-card animate-in">
+        <div class="stat-info">
+            <h3>GPA</h3>
+            <div class="stat-value" data-count="@Model.GPA">0</div>
+            <span class="stat-label">Current CGPA</span>
+        </div>
+        <div class="stat-icon purple"><i class="fas fa-star"></i></div>
+    </div>
+    <div class="stat-card animate-in">
+        <div class="stat-info">
+            <h3>Fees Paid</h3>
+            <div class="stat-value" data-count="@((double)Model.TotalFeesPaid)" data-prefix="₹">0</div>
+            <span class="stat-label">Total paid</span>
+        </div>
+        <div class="stat-icon green"><i class="fas fa-check-circle"></i></div>
+    </div>
+    <div class="stat-card animate-in">
+        <div class="stat-info">
+            <h3>Fees Pending</h3>
+            <div class="stat-value" data-count="@((double)Model.TotalFeesPending)" data-prefix="₹">0</div>
+            <span class="stat-label">Outstanding</span>
+        </div>
+        <div class="stat-icon @(Model.TotalFeesPending > 0 ? "red" : "green")"><i class="fas fa-exclamation-triangle"></i></div>
+    </div>
+</div>
+
+<div class="grid-2">
+    
+    <div class="card animate-in">
+        <div class="card-header">
+            <h2><i class="fas fa-clipboard-check"></i> Course Attendance</h2>
+            <a href="/Student/Attendance" class="btn btn-sm btn-outline">View All</a>
+        </div>
+        <div class="card-body">
+            @if (Model.CourseAttendance.Any())
+            {
+                @foreach (var ca in Model.CourseAttendance)
+                {
+                    <div style="margin-bottom: 16px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                            <span style="font-weight: 500; font-size: 0.9rem;">@ca.CourseName</span>
+                            <span class="badge @(ca.Percentage >= 75 ? "badge-success" : ca.Percentage >= 50 ? "badge-warning" : "badge-danger")">@ca.Percentage%</span>
+                        </div>
+                        <div style="background: var(--bg-glass); border-radius: 10px; height: 8px; overflow: hidden;">
+                            <div style="background: var(--accent-gradient); height: 100%; border-radius: 10px; width: @(ca.Percentage)%; transition: width 1s ease;"></div>
+                        </div>
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">@ca.PresentClasses / @ca.TotalClasses classes</span>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="empty-state"><i class="fas fa-clipboard-check"></i><h3>No attendance data</h3></div>
+            }
+        </div>
+    </div>
+
+    
+    <div class="card animate-in">
+        <div class="card-header">
+            <h2><i class="fas fa-bullhorn"></i> Notices</h2>
+            <a href="/Student/Notices" class="btn btn-sm btn-outline">View All</a>
+        </div>
+        <div class="card-body">
+            @foreach (var notice in Model.RecentNotices)
+            {
+                <div class="notice-item @(notice.Priority == "High" ? "priority-high" : notice.Priority == "Urgent" ? "priority-urgent" : "")">
+                    <div class="notice-title">@notice.Title</div>
+                    <div class="notice-meta">
+                        <span><i class="fas fa-calendar"></i> @notice.PostedDate.ToString("dd MMM")</span>
+                        <span class="badge @(notice.Priority == "Urgent" ? "badge-danger" : "badge-muted")">@notice.Priority</span>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+<div class="grid-2">
+    <div class="card animate-in">
+        <div class="card-header">
+            <h2><i class="fas fa-poll"></i> Recent Results</h2>
+            <a href="/Student/Results" class="btn btn-sm btn-outline">View All</a>
+        </div>
+        <div class="card-body">
+            <div class="table-container">
+                <table class="data-table">
+                    <thead><tr><th>Course</th><th>Exam</th><th>Marks</th><th>Grade</th></tr></thead>
+                    <tbody>
+                        @foreach (var r in Model.RecentResults.Take(5))
+                        {
+                            <tr>
+                                <td style="font-weight: 500;">@r.Course?.CourseName</td>
+                                <td>@r.ExamType</td>
+                                <td>@r.MarksObtained / @r.TotalMarks</td>
+                                <td><span class="badge @(r.Grade == "A+" || r.Grade == "A" ? "badge-success" : r.Grade == "F" ? "badge-danger" : "badge-info")">@r.Grade</span></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card animate-in">
+        <div class="card-header">
+            <h2><i class="fas fa-money-bill-wave"></i> Fee Status</h2>
+            <a href="/Student/Fees" class="btn btn-sm btn-outline">View All</a>
+        </div>
+        <div class="card-body">
+            <div class="table-container">
+                <table class="data-table">
+                    <thead><tr><th>Fee Type</th><th>Amount</th><th>Status</th></tr></thead>
+                    <tbody>
+                        @foreach (var f in Model.FeeRecords.Take(5))
+                        {
+                            <tr>
+                                <td style="font-weight: 500;">@f.FeeType</td>
+                                <td>₹@f.Amount.ToString("N0")</td>
+                                <td><span class="badge @(f.Status == "Paid" ? "badge-success" : f.Status == "Overdue" ? "badge-danger" : "badge-warning")">@f.Status</span></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,35 @@
+@model List<AttendanceSummary>
+@{ ViewData["Title"] = "My Attendance"; var overall = (double)(ViewBag.OverallAttendance ?? 0); }
+
+<div class="stat-card animate-in" style="margin-bottom: 24px;">
+    <div class="stat-info"><h3>Overall Attendance</h3>
+        <div class="stat-value" data-count="@overall" data-suffix="%">0</div>
+        <span class="stat-label">@(overall >= 75 ? "Good standing" : overall >= 50 ? "Needs improvement" : "Critical — below minimum")</span>
+    </div>
+    <div class="stat-icon @(overall >= 75 ? "green" : overall >= 50 ? "orange" : "red")"><i class="fas fa-clipboard-check"></i></div>
+</div>
+
+<div class="card animate-in">
+    <div class="card-header"><h2><i class="fas fa-chart-bar"></i> Course-wise Attendance</h2></div>
+    <div class="card-body">
+        @foreach (var ca in Model)
+        {
+            <div style="margin-bottom: 20px; padding: 16px; background: var(--bg-glass); border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <div>
+                        <span style="font-weight: 600;">@ca.CourseName</span>
+                        <span class="badge badge-primary" style="margin-left: 8px;">@ca.CourseCode</span>
+                    </div>
+                    <span class="badge @(ca.Percentage >= 75 ? "badge-success" : ca.Percentage >= 50 ? "badge-warning" : "badge-danger")" style="font-size: 0.9rem;">@ca.Percentage%</span>
+                </div>
+                <div style="background: var(--bg-input); border-radius: 10px; height: 10px; overflow: hidden;">
+                    <div style="background: @(ca.Percentage >= 75 ? "var(--success)" : ca.Percentage >= 50 ? "var(--warning)" : "var(--danger)"); height: 100%; border-radius: 10px; width: @(ca.Percentage)%; transition: width 1s ease;"></div>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-top: 6px;">
+                    <span style="font-size: 0.8rem; color: var(--text-muted);">Present: @ca.PresentClasses</span>
+                    <span style="font-size: 0.8rem; color: var(--text-muted);">Total: @ca.TotalClasses</span>
+                </div>
+            </div>
+        }
+    </div>
+</div>
