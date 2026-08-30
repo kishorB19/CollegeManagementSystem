@@ -11,6 +11,7 @@ RUN dotnet publish "CollegeManagementSystem.csproj" -c Release -o /app/publish /
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+RUN chmod -R 777 /app
 ENV ASPNETCORE_URLS=http://+:80
 EXPOSE 80
 CMD ["sh", "-c", "dotnet CollegeManagementSystem.dll --urls http://0.0.0.0:${PORT:-80}"]
