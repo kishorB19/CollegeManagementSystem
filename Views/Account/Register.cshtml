@@ -39,26 +39,26 @@
                     }
 
                     <div class="form-group">
-                        <label class="form-label">Full Name</label>
+                        <label class="form-label" for="fullNameInput">Full Name</label>
                         <div class="form-input-wrapper">
                             <i class="fas fa-user"></i>
-                            <input type="text" name="FullName" class="form-control" placeholder="Enter your full name" required />
+                            <input type="text" name="FullName" id="fullNameInput" class="form-control" placeholder="Enter your full name" required autocomplete="name" />
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Email Address</label>
+                        <label class="form-label" for="emailInput">Email Address</label>
                         <div class="form-input-wrapper">
                             <i class="fas fa-envelope"></i>
-                            <input type="email" name="Email" class="form-control" placeholder="Enter your email" required />
+                            <input type="email" name="Email" id="emailInput" class="form-control" placeholder="Enter your email" required autocomplete="username" />
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Department</label>
+                        <label class="form-label" for="departmentSelect">Department</label>
                         <div class="form-input-wrapper">
                             <i class="fas fa-building"></i>
-                            <select name="Department" class="form-control" style="padding-left: 42px;">
+                            <select name="Department" id="departmentSelect" class="form-control" style="padding-left: 42px;">
                                 <option value="Computer Science">Computer Science</option>
                                 <option value="Electronics">Electronics</option>
                                 <option value="Mathematics">Mathematics</option>
@@ -68,10 +68,10 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Password</label>
+                        <label class="form-label" for="passwordInput">Password</label>
                         <div class="form-input-wrapper">
                             <i class="fas fa-lock"></i>
-                            <input type="password" name="Password" class="form-control" placeholder="Create a password" required />
+                            <input type="password" name="Password" id="passwordInput" class="form-control" placeholder="Create a password" required autocomplete="new-password" />
                             <button type="button" class="password-toggle" title="Toggle password visibility">
                                 <i class="fas fa-eye"></i>
                             </button>
@@ -79,10 +79,10 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Confirm Password</label>
+                        <label class="form-label" for="confirmPasswordInput">Confirm Password</label>
                         <div class="form-input-wrapper">
                             <i class="fas fa-lock"></i>
-                            <input type="password" name="ConfirmPassword" class="form-control" placeholder="Confirm your password" required />
+                            <input type="password" name="ConfirmPassword" id="confirmPasswordInput" class="form-control" placeholder="Confirm your password" required autocomplete="new-password" />
                             <button type="button" class="password-toggle" title="Toggle password visibility">
                                 <i class="fas fa-eye"></i>
                             </button>
