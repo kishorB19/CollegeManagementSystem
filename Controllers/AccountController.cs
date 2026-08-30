@@ -30,7 +30,7 @@ namespace CollegeManagementSystem.Controllers
             }
             else if (User.Identity?.IsAuthenticated == true)
             {
-                return RedirectToRoleDashboard();
+                return await RedirectToRoleDashboard();
             }
             ViewData["ReturnUrl"] = returnUrl;
             var model = new LoginViewModel
@@ -64,7 +64,7 @@ namespace CollegeManagementSystem.Controllers
                     if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                         return Redirect(returnUrl);
 
-                    return RedirectToRoleDashboard(user);
+                    return await RedirectToRoleDashboard(user);
                 }
 
                 ModelState.AddModelError(string.Empty, "Invalid email or password.");
@@ -72,7 +72,7 @@ namespace CollegeManagementSystem.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error during login for {Email}", model.Email);
-                ModelState.AddModelError(string.Empty, "An error occurred. Please try again.");
+                ModelState.AddModelError(string.Empty, $"An error occurred: {ex.Message}. Check database permissions.");
             }
 
             return View(model);
@@ -142,11 +142,11 @@ namespace CollegeManagementSystem.Controllers
             return View();
         }
 
-        private IActionResult RedirectToRoleDashboard(ApplicationUser? user = null)
+        private async Task<IActionResult> RedirectToRoleDashboard(ApplicationUser? user = null)
         {
-            if (User.IsInRole("Admin") || (user != null && _userManager.IsInRoleAsync(user, "Admin").Result))
+            if (User.IsInRole("Admin") || (user != null && await _userManager.IsInRoleAsync(user, "Admin")))
                 return RedirectToAction("Dashboard", "Admin");
-            if (User.IsInRole("Teacher") || (user != null && _userManager.IsInRoleAsync(user, "Teacher").Result))
+            if (User.IsInRole("Teacher") || (user != null && await _userManager.IsInRoleAsync(user, "Teacher")))
                 return RedirectToAction("Dashboard", "Teacher");
             return RedirectToAction("Dashboard", "Student");
         }
