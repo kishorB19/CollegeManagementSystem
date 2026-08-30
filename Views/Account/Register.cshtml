@@ -26,7 +26,6 @@
                 </div>
 
                 <form class="login-form" method="post" asp-action="Register" asp-controller="Account" data-validate>
-                    @Html.AntiForgeryToken()
 
                     @if (ViewData.ModelState.ErrorCount > 0)
                     {
