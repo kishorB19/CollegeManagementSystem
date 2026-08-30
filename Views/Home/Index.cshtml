@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="~/css/style.css" />
 </head>
 <body>
+    <!-- Navigation Bar -->
     <nav class="landing-nav">
         <div class="landing-logo">
             <i class="fas fa-graduation-cap"></i>
@@ -21,6 +22,7 @@
         </div>
         <div class="landing-nav-links">
             <a href="#features">Features</a>
+            <a href="#tech-stack">Tech Stack</a>
             <a href="#credentials">Demo Login</a>
             <a href="/Account/Login" class="hero-btn primary" style="padding: 8px 20px; font-size: 0.9rem;">
                 <i class="fas fa-sign-in-alt"></i> Login
@@ -28,7 +30,16 @@
         </div>
     </nav>
 
+    <!-- Hero Section with Floating Particles -->
     <section class="hero">
+        <div class="hero-particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
         <div class="hero-content">
             <div class="hero-badge">
                 <i class="fas fa-sparkles"></i>
@@ -51,6 +62,7 @@
         </div>
     </section>
 
+    <!-- Features Section -->
     <section class="features" id="features">
         <div class="section-title">
             <h2>Powerful Features</h2>
@@ -102,13 +114,32 @@
         </div>
     </section>
 
+    <!-- Tech Stack Section -->
+    <section class="tech-stack-section" id="tech-stack">
+        <div class="section-title">
+            <h2>Built With Modern Technologies</h2>
+            <p>A full-stack application powered by industry-standard tools</p>
+        </div>
+        <div class="tech-badges">
+            <span class="tech-badge animate-on-scroll"><i class="fab fa-html5" style="color: #e34f26;"></i> HTML5</span>
+            <span class="tech-badge animate-on-scroll"><i class="fab fa-css3-alt" style="color: #1572b6;"></i> CSS3</span>
+            <span class="tech-badge animate-on-scroll"><i class="fab fa-js-square" style="color: #f7df1e;"></i> JavaScript</span>
+            <span class="tech-badge animate-on-scroll"><i class="fas fa-code" style="color: #512bd4;"></i> C#</span>
+            <span class="tech-badge animate-on-scroll"><i class="fas fa-server" style="color: #512bd4;"></i> ASP.NET Core</span>
+            <span class="tech-badge animate-on-scroll"><i class="fas fa-database" style="color: #cc2927;"></i> SQL Server</span>
+            <span class="tech-badge animate-on-scroll"><i class="fab fa-git-alt" style="color: #f05032;"></i> Git</span>
+            <span class="tech-badge animate-on-scroll"><i class="fas fa-plug" style="color: #10b981;"></i> REST API</span>
+        </div>
+    </section>
+
+    <!-- Demo Credentials Section -->
     <section class="credentials-section" id="credentials">
         <div class="section-title">
             <h2>Demo Login Credentials</h2>
             <p>Click any card to automatically login with the pre-configured account</p>
         </div>
         <div class="credentials-grid">
-            <a href="/Account/Login?email=admin@college.com&password=admin123" class="credential-card" style="display: block; cursor: pointer; color: inherit; text-decoration: none;">
+            <a href="/Account/Login?email=admin@college.com&password=admin123" class="credential-card animate-on-scroll" style="display: block; cursor: pointer; color: inherit; text-decoration: none;">
                 <div class="role-icon" style="background: rgba(99, 102, 241, 0.15); color: #818cf8;">
                     <i class="fas fa-user-shield"></i>
                 </div>
@@ -118,7 +149,7 @@
                 <div class="cred-info" style="margin-top: 8px;">Password</div>
                 <div class="cred-value">admin123</div>
             </a>
-            <a href="/Account/Login?email=kishor.kumar@college.com&password=teacher123" class="credential-card" style="display: block; cursor: pointer; color: inherit; text-decoration: none;">
+            <a href="/Account/Login?email=kishor.kumar@college.com&password=teacher123" class="credential-card animate-on-scroll" style="display: block; cursor: pointer; color: inherit; text-decoration: none;">
                 <div class="role-icon" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">
                     <i class="fas fa-chalkboard-teacher"></i>
                 </div>
@@ -128,7 +159,7 @@
                 <div class="cred-info" style="margin-top: 8px;">Password</div>
                 <div class="cred-value">teacher123</div>
             </a>
-            <a href="/Account/Login?email=rahul.kumar@student.college.com&password=student123" class="credential-card" style="display: block; cursor: pointer; color: inherit; text-decoration: none;">
+            <a href="/Account/Login?email=rahul.kumar@student.college.com&password=student123" class="credential-card animate-on-scroll" style="display: block; cursor: pointer; color: inherit; text-decoration: none;">
                 <div class="role-icon" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b;">
                     <i class="fas fa-user-graduate"></i>
                 </div>
@@ -141,10 +172,16 @@
         </div>
     </section>
 
+    <!-- Footer -->
     <footer class="landing-footer">
-        <p>&copy; @DateTime.Now.Year College Management System. Built with ❤️ using ASP.NET Core, C#, and SQL. 
+        <p>&copy; @DateTime.Now.Year College Management System. Built with ❤️ using C#, ASP.NET Core, HTML, CSS, JavaScript &amp; SQL. 
         <a href="https://github.com/kishorB19" target="_blank"><i class="fab fa-github"></i> GitHub: kishorB19</a></p>
     </footer>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" title="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
 
     <script src="~/js/site.js"></script>
 </body>
