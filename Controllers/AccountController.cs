@@ -24,12 +24,13 @@ namespace CollegeManagementSystem.Controllers
         [HttpGet]
         public async Task<IActionResult> Login(string? email = null, string? password = null, string? returnUrl = null)
         {
-            if (!string.IsNullOrEmpty(email))
+            if (User.Identity?.IsAuthenticated == true)
             {
-                await _signInManager.SignOutAsync();
-            }
-            else if (User.Identity?.IsAuthenticated == true)
-            {
+                if (!string.IsNullOrEmpty(email))
+                {
+                    await _signInManager.SignOutAsync();
+                    return RedirectToAction("Login", new { email, password, returnUrl });
+                }
                 return await RedirectToRoleDashboard();
             }
             ViewData["ReturnUrl"] = returnUrl;
