@@ -22,16 +22,25 @@ bool isPostgres = false;
 
 if (!string.IsNullOrEmpty(databaseUrl))
 {
-    var uri = new Uri(databaseUrl);
-    var userInfo = uri.UserInfo.Split(':');
-    var user = userInfo[0];
-    var password = userInfo[1];
-    var host = uri.Host;
-    var port = uri.Port;
-    var database = uri.LocalPath.TrimStart('/');
-    
-    connectionString = $"Host={host};Port={port};Database={database};Username={user};Password={password};SSL Mode=Require;Trust Server Certificate=true";
-    isPostgres = true;
+    try
+    {
+        var uri = new Uri(databaseUrl);
+        var userInfo = uri.UserInfo.Split(':');
+        var user = userInfo[0];
+        var password = userInfo.Length > 1 ? userInfo[1] : "";
+        var host = uri.Host;
+        var port = uri.Port;
+        var database = uri.LocalPath.TrimStart('/');
+        
+        connectionString = $"Host={host};Port={port};Database={database};Username={user};Password={password};SSL Mode=Require;Trust Server Certificate=true";
+        isPostgres = true;
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error parsing DATABASE_URL: {ex.Message}. Falling back to SQLite.");
+        connectionString = "Data Source=CollegeManagement.db";
+        isPostgres = false;
+    }
 }
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -109,7 +118,12 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseForwardedHeaders();
-app.UseHttpsRedirection();
+
+// Skip HttpsRedirection on Render to avoid SSL termination redirect loops / health check failures
+if (Environment.GetEnvironmentVariable("RENDER") != "true")
+{
+    app.UseHttpsRedirection();
+}
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
