@@ -81,7 +81,9 @@
             var email = document.getElementById("emailInput").value;
             var password = document.getElementById("passwordInput").value;
             if (errorCount === 0 && email && password) {
-                document.getElementById("loginForm").submit();
+                setTimeout(function () {
+                    document.getElementById("loginForm").submit();
+                }, 150);
             }
         });
     </script>
