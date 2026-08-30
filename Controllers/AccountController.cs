@@ -1,5 +1,6 @@
 using CollegeManagementSystem.Models;
 using CollegeManagementSystem.Models.ViewModels;
+using CollegeManagementSystem.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,15 +11,18 @@ namespace CollegeManagementSystem.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<AccountController> _logger;
+        private readonly ApplicationDbContext _context;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            ILogger<AccountController> logger)
+            ILogger<AccountController> logger,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _context = context;
         }
 
         [HttpGet]
@@ -111,6 +115,19 @@ namespace CollegeManagementSystem.Controllers
                 {
                     await _userManager.AddToRoleAsync(user, "Student");
                     _logger.LogInformation("New user {Email} registered.", model.Email);
+                    
+                    var student = new Student
+                    {
+                        UserId = user.Id,
+                        RollNumber = "STU" + DateTime.UtcNow.ToString("yyyyMMddHHmmss"),
+                        Department = model.Department ?? "General",
+                        Semester = 1,
+                        DateOfBirth = DateTime.UtcNow.AddYears(-18),
+                        AdmissionDate = DateTime.UtcNow
+                    };
+                    _context.Students.Add(student);
+                    await _context.SaveChangesAsync();
+
                     await _signInManager.SignInAsync(user, false);
                     return RedirectToAction("Dashboard", "Student");
                 }
