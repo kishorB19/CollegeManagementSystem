@@ -48,13 +48,13 @@
                 <nav class="sidebar-nav">
                     @if (User.IsInRole("Admin"))
                     {
-                        <a href="/Admin/Dashboard" class="nav-item @(ViewContext.RouteData.Values["action"]?.ToString() == "Dashboard" ? "active" : "")">
+                        <a href="/Admin/Dashboard" class="nav-item @(ViewContext.RouteData.Values["action"]?.ToString() == "Dashboard" ? "active" : "")" data-tooltip="Dashboard">
                             <i class="fas fa-th-large"></i><span>Dashboard</span>
                         </a>
-                        <a href="/Admin/Students" class="nav-item @(ViewContext.RouteData.Values["action"]?.ToString() == "Students" ? "active" : "")">
+                        <a href="/Admin/Students" class="nav-item @(ViewContext.RouteData.Values["action"]?.ToString() == "Students" ? "active" : "")" data-tooltip="Students">
                             <i class="fas fa-user-graduate"></i><span>Students</span>
                         </a>
-                        <a href="/Admin/Teachers" class="nav-item @(ViewContext.RouteData.Values["action"]?.ToString() == "Teachers" ? "active" : "")">
+                        <a href="/Admin/Teachers" class="nav-item @(ViewContext.RouteData.Values["action"]?.ToString() == "Teachers" ? "active" : "")" data-tooltip="Teachers">
                             <i class="fas fa-chalkboard-teacher"></i><span>Teachers</span>
                         </a>
                         <a href="/Admin/Courses" class="nav-item @(ViewContext.RouteData.Values["action"]?.ToString() == "Courses" ? "active" : "")">
@@ -151,6 +151,11 @@
         
         @RenderBody()
     }
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" title="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="~/js/site.js"></script>
