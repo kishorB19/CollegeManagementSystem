@@ -1,8 +1,6 @@
 services:
   - type: web
     name: college-management-system
-    env: dotnet
+    env: docker
     plan: free
     branch: master
-    buildCommand: dotnet publish -c Release -o out
-    startCommand: dotnet out/CollegeManagementSystem.dll --urls http://0.0.0.0:$PORT
