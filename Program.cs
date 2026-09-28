@@ -15,6 +15,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
 bool isPostgres = false;
 
+// Use DATABASE_URL env var if set (Render PostgreSQL), otherwise fall back to SQLite
 if (!string.IsNullOrEmpty(databaseUrl))
 {
     try
@@ -26,13 +27,18 @@ if (!string.IsNullOrEmpty(databaseUrl))
         var host = uri.Host;
         var port = uri.Port > 0 ? uri.Port : 5432;
         var database = uri.LocalPath.TrimStart('/');
-        
+
+        // Test DNS resolution before committing to Postgres
+        var addresses = await System.Net.Dns.GetHostAddressesAsync(host).WaitAsync(TimeSpan.FromSeconds(5));
+        if (addresses.Length == 0) throw new Exception($"DNS returned no addresses for host: {host}");
+
         connectionString = $"Host={host};Port={port};Database={database};Username={user};Password={password};SSL Mode=Require;Trust Server Certificate=true";
         isPostgres = true;
+        Console.WriteLine($"Using PostgreSQL database: {host}");
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"Error parsing DATABASE_URL: {ex.Message}. Falling back to SQLite.");
+        Console.WriteLine($"PostgreSQL unavailable ({ex.Message}). Falling back to SQLite.");
         connectionString = "Data Source=CollegeManagement.db";
         isPostgres = false;
     }
@@ -41,13 +47,9 @@ if (!string.IsNullOrEmpty(databaseUrl))
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     if (isPostgres)
-    {
         options.UseNpgsql(connectionString);
-    }
     else
-    {
         options.UseSqlite(connectionString);
-    }
 });
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
