@@ -28,11 +28,14 @@ if (!string.IsNullOrEmpty(databaseUrl))
         var port = uri.Port > 0 ? uri.Port : 5432;
         var database = uri.LocalPath.TrimStart('/');
 
-        // Test DNS resolution before committing to Postgres
-        var addresses = await System.Net.Dns.GetHostAddressesAsync(host).WaitAsync(TimeSpan.FromSeconds(5));
-        if (addresses.Length == 0) throw new Exception($"DNS returned no addresses for host: {host}");
-
         connectionString = $"Host={host};Port={port};Database={database};Username={user};Password={password};SSL Mode=Require;Trust Server Certificate=true";
+        
+        // Test actual connection to Postgres before committing to it
+        using (var testConn = new Npgsql.NpgsqlConnection(connectionString))
+        {
+            testConn.Open();
+        }
+        
         isPostgres = true;
         Console.WriteLine($"Using PostgreSQL database: {host}");
     }
